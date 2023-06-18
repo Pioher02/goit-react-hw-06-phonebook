@@ -1,25 +1,21 @@
 import ContactList from './ContactList';
 import ContactForm from './ContactForm';
 import Filter from './Filter';
-import { nanoid } from 'nanoid';
+import { addContacts, deleteContact } from "../redux/contacts/slice";
+import { updateFilter } from "../redux/filter/slice";
 import Notiflix from 'notiflix';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const App = () => {
     
-  const contacts = useSelector((state) => state.contacts); // para usarlo
+  const contacts = useSelector((state) => state.contacts);
   const filter = useSelector((state) => state.filter);
+  const dispatch = useDispatch();
 
-  // const [contacts, setContacts] = useState([
-  //   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-  //   { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-  //   { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-  //   { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-  // ]);
-  // const [prevContacts, setPrevContacts] = useState(contacts);
-  // const [filter, setFilter] = useState('');
-
+  const [prevContacts, setPrevContacts] = useState(contacts);
+  
+  //Guarda contacto nuevo
   const saveContact = evt => {
     evt.preventDefault();
 
@@ -31,14 +27,7 @@ const App = () => {
         .includes(form.elements.name.value.toLocaleLowerCase())
     );
     if (validation === undefined) {
-      setContacts([
-        ...contacts,
-        {
-          id: nanoid(),
-          name: form.elements.name.value,
-          number: form.elements.number.value,
-        },
-      ]);
+      dispatch (addContacts({name: form.elements.name.value, number: form.elements.number.value}));
       form.reset();
     } else {
       Notiflix.Notify.failure(validation.name + 'is already in contacts');
@@ -47,20 +36,21 @@ const App = () => {
   };
 
   const filterContact = e => {
-    setFilter(e.currentTarget.value);
+    dispatch(updateFilter(e.currentTarget.value));
   };
 
+  //Borrar contacto
   const handleDeleteContacts = id => {
-    let updateContacts = contacts.filter(contact => contact.id !== id);
-    setContacts(updateContacts);
+    dispatch (deleteContact(id));
   };
 
+  //Guardar en localStorage
   useEffect(() => {
     const savedContacts = localStorage.getItem('contacts');
     const parsedContacts = JSON.parse(savedContacts);
 
     if (parsedContacts !== null) {
-      setContacts(parsedContacts);
+      // setContacts(parsedContacts);
     } else {
       localStorage.setItem('contacts', JSON.stringify(contacts));
     } // eslint-disable-next-line
@@ -80,7 +70,7 @@ const App = () => {
       <Filter filterContact={filterContact}></Filter>
       <ContactList
         contacts={contacts}
-        filter={filter}
+        filter={filter.value}
         deleteContact={handleDeleteContacts}
       />
     </>
