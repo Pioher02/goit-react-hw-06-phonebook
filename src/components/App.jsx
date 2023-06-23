@@ -4,7 +4,7 @@ import Filter from './Filter';
 import { addContacts, deleteContact } from "../redux/contacts/slice";
 import { updateFilter } from "../redux/filter/slice";
 import Notiflix from 'notiflix';
-import { useEffect, useState } from 'react';
+//import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 const App = () => {
@@ -13,7 +13,7 @@ const App = () => {
   const filter = useSelector((state) => state.filter);
   const dispatch = useDispatch();
 
-  const [prevContacts, setPrevContacts] = useState(contacts);
+  //const [prevContacts, setPrevContacts] = useState(contacts);
   
   //Guarda contacto nuevo
   const saveContact = evt => {
@@ -45,23 +45,23 @@ const App = () => {
   };
 
   //Guardar en localStorage
-  useEffect(() => {
-    const savedContacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(savedContacts);
+  // useEffect(() => {
+  //   const savedContacts = localStorage.getItem('contacts');
+  //   const parsedContacts = JSON.parse(savedContacts);
 
-    if (parsedContacts !== null) {
-      // setContacts(parsedContacts);
-    } else {
-      localStorage.setItem('contacts', JSON.stringify(contacts));
-    } // eslint-disable-next-line
-  }, []);
+  //   if (parsedContacts !== null) {
+  //     // setContacts(parsedContacts);
+  //   } else {
+  //     localStorage.setItem('contacts', JSON.stringify(contacts));
+  //   } // eslint-disable-next-line
+  // }, []);
 
-  useEffect(() => {
-    if (contacts !== prevContacts) {
-      localStorage.setItem('contacts', JSON.stringify(contacts));
-      setPrevContacts(contacts);
-    }// eslint-disable-next-line
-  }, [contacts]);
+  // useEffect(() => {
+  //   if (contacts !== prevContacts) {
+  //     localStorage.setItem('contacts', JSON.stringify(contacts));
+  //     setPrevContacts(contacts);
+  //   }// eslint-disable-next-line
+  // }, [contacts]);
 
   return (
     <>

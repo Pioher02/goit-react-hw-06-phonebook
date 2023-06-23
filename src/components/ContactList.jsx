@@ -55,7 +55,7 @@ function ContactList({ contacts, filter, deleteContact }) {
 }
 
 ContactList.propTypes = {
-  contacts: propTypes.array.isRequired,
+  contacts: propTypes.array,
   filter: propTypes.string,
   deleteContact: propTypes.func,
 };
